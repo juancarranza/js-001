@@ -4,8 +4,8 @@ function suma() {
 
 console.log(suma());
 
-
-let paragraphs=document.getElementsByTagName("p");
+//changing from variable to constant.
+const paragraphs=document.getElementsByTagName("p");
 console.log(paragraphs);
 if(paragraphs.length>0){
     //new comment
