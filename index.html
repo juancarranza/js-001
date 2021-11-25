@@ -8,14 +8,63 @@
    
 </head>
 <body>
-    <h1>Bootcamp Javascript</h1>
-    <p>Bienvenidos!</p>
-    <p>Bienvenidos2!</p>
+    <form action="index.html">
+        <input type="hidden" name="codigo" id="codigo">
+        <div>
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre">           
+        </div>
+        <div>
+            <label for="cantidad">Cantidad</label>
+            <input type="number" name="cantidad" id="cantidad">           
+        </div>
+        <div>
+            <label for="precio">Precio</label>
+            <input type="number" name="precio" id="precio">           
+        </div>
+        <div>
+            <label for="categoria">Precio</label>
+            <select name="categoria" id="categoria">
+                <option value="1">Categoria 1</option>
+                <option value="2">Categoria 2</option>
+                <option value="3">Categoria 3</option>
+                <option value="4">Categoria 4</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Guardar</button>
+        </div>
+    </form>
 
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <td>Codigo</td>
+                    <td>Nombre</td>
+                    <td>Cantidad</td>
+                    <td>Precio</td>
+                    <td>Total</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Here we will add all the items using the Guardar Button. -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">Totales:</td>
+                    <td id="cantidad-total">0</td>
+                    <td id="precio-total">0</td>
+                    <td id="gran-total">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
     <!-- It is a better practice to use it here instead of the head because sometimes the browser loads each of the lines (interpret), 
         and if the js component does not load the page 
         is not going to shown properly, so here the first loads the page and elements and after that the js is going to be loaded. Another 
         approach could be if you use the async property in the script tag. -->
-    <script async src="index.js"></script>
+    <script  src="index.js"></script>
 </body>
 </html>
