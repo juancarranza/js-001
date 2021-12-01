@@ -115,7 +115,7 @@ function onEdit(event){
     event.preventDefault();
 
     /** @type {HTMLAnchorElement} */
-    const anchor=event.target;//referencia al elemento html <td><a href="#" onclick="onEdit(event)">Editar</a> | <a href="#" onclick="onDelete(event)">Eliminar</a> </td>
+    const anchor=event.target;//reference to the html element <td><a href="#" onclick="onEdit(event)">Editar</a> | <a href="#" onclick="onDelete(event)">Eliminar</a> </td>
     console.log(anchor.parentElement); 
 
     const tr=anchor.parentElement.parentElement; //obtenemos el elemento html <tr><td><a href="#" onclick="onEdit(event)">Editar</a> | <a href="#" onclick="onDelete(event)">Eliminar</a> </td></tr>
