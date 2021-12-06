@@ -81,7 +81,7 @@ function reemplazar2Por100{
         return x;
     } 
 }*/
-
+//prueba
 console.log("numeros: ",numeros);
 console.log("numeros2: ",numeros2);
 console.log("numeros3: ",numeros3);
