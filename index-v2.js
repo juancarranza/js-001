@@ -19,10 +19,13 @@ const preloadedState={
     productos:[]
 };
 
+//function para evitar cambiar la operacion en dos lugares distintos. Pendiente por hacer
+
 //como nos podemos dar cuenta aqui rompemos un poco con las reglas de Redux porque esta funcion no es pura
 //para corregir esto se utilizara un middleware pero sera mas adelante
 let indice=0;
 const reducer =(state,action) => {
+    //Agregar
     if(action.type == "producto-agregado"){
         indice++;
         const producto=action.payload;
@@ -40,6 +43,42 @@ const reducer =(state,action) => {
                 }
             ]
         };
+    }
+
+    //Editar
+    if(action.type=="producto-modificado"){
+        
+        const producto=action.payload;
+        //la funcion slice() se puede utilizar para obtener el arreglo o parte del arreglo
+        //en caso slice(1) esto obtiene el arreglo desde la segunda posicion
+        //en caso slice(1,3) esto obtiene el arreglo desde la segunda posicion hasta la cuarta posicion
+        const productos=state.productos.slice();//si no se le pone ningun parametro esto realiza una copia del arreglo
+        const codigo = producto.codigo;
+        const old=productos.find((item)=>item.codigo == codigo);
+        const index=productos.indexOf(old);
+        const total=producto.cantidad*producto.precio;
+
+        productos[index]={
+            ...producto,
+            total
+        };
+
+        return{
+            ...state,
+            productos
+        }
+    }
+
+    //Eliminar
+    if(action.type=="producto-eliminado"){
+        
+        const producto=action.payload;
+        const codigo = producto.codigo;
+        const productos=state.productos.filter((item) => item.codigo!= codigo);
+        return{
+            ...state,
+            productos    
+        }
     }
 
     return state;
@@ -74,16 +113,35 @@ function renderTable(productos){
             <td>${item.total}</td>
             <td>
                 <div class="btn-group">
-                    <a title="Editar" href="#" onclick="onEdit(event)" class="btn btn-sm btn-outline-secondary">
+                    <a title="Editar" href="#" class="btn btn-sm btn-outline-secondary">
                         <i class="bi bi-pencil-square"></i>
                     </a> 
                 
-                    <a title="Eliminar" href="#" onclick="onDelete(event)" class="btn btn-sm btn-outline-danger">
+                    <a title="Eliminar" href="#" class="btn btn-sm btn-outline-danger">
                     <i class="bi bi-trash"></i>
                     </a> 
                 </div>
             </td>
         `;
+
+        //***inicio funcion Eliminar***
+        /*         
+        const links=tr.getElementsByTagName("a");
+        const editar=links[0];
+        const eliminar=links[1]; */
+        //esta linea es lo mismo que las tres de arriba
+        const [editar, eliminar]=tr.getElementsByTagName("a");
+
+        eliminar.addEventListener("click",(event)=>{
+            event.preventDefault();
+            store.dispatch({
+                type:"producto-eliminado",
+                payload:{
+                    codigo:item.codigo
+                }
+            });
+        });
+        //***fin funcion Eliminar*** 
         return tr;
     });
 
@@ -91,6 +149,14 @@ function renderTable(productos){
     filas.forEach((tr)=>{
         tbody.appendChild(tr);
     });
+
+    //funcion map() genera en este caso un arreglo de cantidades
+    //funcion reduce((a,b)=> a+b, 0) va realizando la suma de los elementos del arreglo, va sumando el primer elemento del arreglo, mas el siguiente y asi. 
+    //Por lo que se le debe de indicar un valor inicial en este caso es 0 para que no haya error al ejecutarlo.
+    const cantidadTotal=productos
+        .map(x=>x.cantidad)
+        .reduce((a,b) => a + b, 0);
+
     
 }
 
@@ -108,7 +174,10 @@ store.dispatch({
     type:"producto-modificado",
     payload: {
         codigo: 1,
-        nombre: "prueba V2"
+        nombre: "prueba aV2",
+        cantidad: 4,
+        precio: 11,
+        categoria:1
     }
 });
 store.dispatch({
@@ -133,3 +202,11 @@ store.dispatch({
     }
 });
 //console.log(store);
+
+store.dispatch({
+    type:"producto-eliminado",
+    payload: {
+        codigo:2
+    }
+
+});
