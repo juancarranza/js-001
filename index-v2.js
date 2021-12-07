@@ -153,10 +153,32 @@ function renderTable(productos){
     //funcion map() genera en este caso un arreglo de cantidades
     //funcion reduce((a,b)=> a+b, 0) va realizando la suma de los elementos del arreglo, va sumando el primer elemento del arreglo, mas el siguiente y asi. 
     //Por lo que se le debe de indicar un valor inicial en este caso es 0 para que no haya error al ejecutarlo.
-    const cantidadTotal=productos
+    /* const cantidadTotal=productos
         .map(x=>x.cantidad)
+        .reduce((a,b) => a + b, 0); */
+    const cantidadTotal=sum(productos,x=>x.cantidad);//esta es equivalente a las tres lineas que estan arriba
+    
+    /* const precioTotal=productos
+        .map(x=>x.precio)
         .reduce((a,b) => a + b, 0);
+     */
+    const precioTotal=sum(productos,x=>x.precio);//esta es equivalente a las tres lineas que estan arriba
 
+    /* const granTotal=productos
+        .map(x=>x.total)
+        .reduce((a,b) => a + b, 0); */
+    const granTotal=sum(productos,x=>x.total);//esta es equivalente a las tres lineas que estan arriba
+    
+    tdCantidadTotal.innerText=cantidadTotal;
+    tdPreciosTotales.innerText=precioTotal;
+    tdGranTotal.innerText=granTotal;
+
+    //en javascript se pueden crear funciones dentro de una funcion
+    function sum(elementos,selector){
+        return elementos
+                    .map(selector)
+                    .reduce((a,b) => a + b,0);
+    }
     
 }
 
