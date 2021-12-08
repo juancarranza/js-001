@@ -81,6 +81,16 @@ const reducer =(state,action) => {
         }
     }
 
+    //Seleccionar (cuando se da click en el icono de Editar)
+    if(action.type=="producto-seleccionado"){
+
+        const codigo=action.payload.codigo;
+        return{
+            ...state,
+            producto:state.productos.find(x=>x.codigo==codigo) || {}
+        }
+    }
+
     return state;
 };
 
@@ -94,11 +104,12 @@ const unsuscribe=store.subscribe(() => {
     if(currentState!=latestState){
         latestState=currentState;
         console.log("estado: ", currentState);
+        renderForm(currentState.producto);
         renderTable(currentState.productos);
     }
     
 
-})
+});
 
 //tip: los metodos que dibujan algo en el html usan el prefijo "render"
 function renderTable(productos){
@@ -141,7 +152,23 @@ function renderTable(productos){
                 }
             });
         });
-        //***fin funcion Eliminar*** 
+        //***fin funcion Eliminar***
+        
+        //***inicio funcion Editar***/
+        editar.addEventListener("click",(event)=>{
+            event.preventDefault();
+            store.dispatch({
+                type:"producto-seleccionado",
+                payload:{
+                    codigo:item.codigo
+                    /* nombre: item.nombre,
+                    cantidad: item.cantidad,
+                    precio: item.precio,
+                    categoria: item.categoria */
+                }
+            });
+        });
+        //***inicio funcion Editar***/
         return tr;
     });
 
@@ -180,6 +207,15 @@ function renderTable(productos){
                     .reduce((a,b) => a + b,0);
     }
     
+}
+//siguiendo el tip, este dibuja los datos del dato a Editar
+function renderForm(producto){
+
+    inputCodigo.value = producto.codigo || "";
+    inputName.value = producto.nombre || "";
+    inputCantidad.value = producto.cantidad || "";
+    inputPrecio.value = producto.precio || "";
+    selectCategoria.value = producto.categoria || 1;
 }
 
 store.dispatch({
@@ -288,5 +324,11 @@ function onSubmit(event){
             }
         });
     }
-    form.reset();
+    //clear the form and the state
+    store.dispatch({
+        type:"producto-seleccionado",
+        payload:{
+            codigo:null
+        }
+    });
 }
