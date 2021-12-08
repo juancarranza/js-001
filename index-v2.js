@@ -232,3 +232,61 @@ store.dispatch({
     }
 
 });
+
+form.addEventListener("submit",onSubmit);
+
+/** 
+ * @param {Event} event
+*/
+function onSubmit(event){
+    
+    event.preventDefault();//funcion que evita que el evento por default, ignore la accion the submit que tiene el html (submit). Se evita que el formulario se redirecciona a otra pagina
+    
+    const data = new FormData(form);//get data from the form element (<html form>)
+    const values = Array.from(data.entries());//convert the object FormData  to an array object, the array has the following structure
+    /*
+        0: ['nombre','Pantalon(value that we type in the input)'] -> reference to => the following html tag <input type="text" name="nombre" id="nombre">    
+        1: ['cantidad','100']
+    */   
+
+    /* 
+    const nombre=values[0][1];
+    const cantidad=values[1][1];
+    const precio=values[2][1];
+    const categoria=values[3][1];
+    //esta solucion es lo mismo que esta en las siguientes 5 lineas de codigo
+    */
+    const [frmCodigo,frmNombre,frmCantidad, frmPrecio, frmCategoria] = values;
+    
+    const codigo=parseInt(frmCodigo[1]);
+    const nombre = frmNombre[1];
+    const cantidad=parseFloat(frmCantidad[1]);
+    const precio=parseFloat(frmPrecio[1]);
+    const categoria=parseInt(frmCategoria[1]);
+
+    //Condition to validate if this is Edit action or if we are adding an item 
+    if(codigo){
+        store.dispatch({
+            type:"producto-modificado",
+            payload:{
+                codigo,
+                nombre,
+                cantidad,
+                precio,
+                categoria
+            }
+        });
+
+    }else{
+        store.dispatch({
+            type:"producto-agregado",
+            payload:{
+                nombre,
+                cantidad,
+                precio,
+                categoria
+            }
+        });
+    }
+    form.reset();
+}
