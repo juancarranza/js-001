@@ -281,7 +281,7 @@ function onSubmit(event){
     const data = new FormData(form);//get data from the form element (<html form>)
     const values = Array.from(data.entries());//convert the object FormData  to an array object, the array has the following structure
     /*
-        0: ['nombre','Pantalon(value that we type in the input)'] -> reference to => the following html tag <input type="text" name="nombre" id="nombre">    
+        0: ['nombre','Pantalon']  ([1]=value that we type in the input)-> reference to => the following html tag <input type="text" name="nombre" id="nombre">    
         1: ['cantidad','100']
     */   
 
