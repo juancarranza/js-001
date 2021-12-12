@@ -1,3 +1,4 @@
+/* --------------------Interfaz Grafica(elementos html)------------------------ */
 const ui={
     
     onFormSubmit:(data)=>{},

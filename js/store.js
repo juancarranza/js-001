@@ -1,3 +1,4 @@
+/* ------------------------------Reducer y Store--------------------- */
 //Aqui se coloca todo lo que tiene que ver con el manejo de los estados (Reducer)
 //como nos podemos dar cuenta aqui rompemos un poco con las reglas de Redux porque esta funcion no es pura
 //para corregir esto se utilizara un middleware pero sera mas adelante
@@ -99,3 +100,31 @@ const productoAgregado = (payload) => ({
     type:"producto-agregado",
     payload
 });
+
+/* Redux y Middlewares
+Los Middlewares son un concepto bastante poderoso en Redux, porque nos van a permitir modificar la logica de nuestra aplicacion,
+o agregarle funcionalidad a la misma sin tener que modificar tanto el codigo. Es como que esto nos permite utilizar/agregar plugins a nuestra aplicacion.
+
+Un Middleware nos es mas que una funcion
+
+*/
+
+/* function loggerMiddleware(store){
+    return function dispatchWrapper(next){//El wrapper encierra todas las llamadas que nosotros hagamos al dispatch que hagamos
+                                          //por ejemplo por cada una de los eventos que tenemos en el app.js (store.dispatch(productoEliminado(codigo)),store.dispatch(productoAgregado(producto)))
+                                          //next es una funcion que nosotros llamamos cuando queremos que se ejecute el action original, el dispatchWrapper devuelve otra funcion
+        return function actionHandler(action){
+            console.log("dispatching",action);
+            const result=next(action);
+            console.log("next sate",store.getState());
+            return result;
+        }
+    }
+} */
+//esto es equivalente al Middleware de arriba solo que se utilizo arrow function
+const loggerMiddleware = store => next => action => {
+    console.log("dispatching",action);
+    const result=next(action);
+    console.log("next sate",store.getState());
+    return result;
+}

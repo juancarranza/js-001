@@ -1,9 +1,11 @@
+/* ----------------Eventos-------------- */
 const preloadedState={
     producto:{},
     productos:[]
 };
 
-const store=Redux.createStore(reducer, preloadedState);
+const middlewares = Redux.applyMiddleware(loggerMiddleware);
+const store=Redux.createStore(reducer, preloadedState, middlewares);
 
 let latestState;
 
@@ -23,10 +25,10 @@ ui.onFormSubmit = (producto) =>{
     if(producto.codigo){
         store.dispatch(productoModificado(producto));
     }else{
-        
+        store.dispatch(productoAgregado(producto));
     }
     //clear the form and the state
-    store.dispatch(productoAgregado(producto));
+    store.dispatch(productoSeleccionado(null));
 }
 
 /* ui.onEliminarClick=(codigo)=>{
