@@ -1,14 +1,36 @@
 /* ------------------------------Reducer y Store--------------------- */
 //Aqui se coloca todo lo que tiene que ver con el manejo de los estados (Reducer)
 //como nos podemos dar cuenta aqui rompemos un poco con las reglas de Redux porque esta funcion no es pura
-//para corregir esto se utilizara un middleware pero sera mas adelante
-let indice=0;
+const ActionTypes={
+    ProductoAgregado: "producto-agregado",
+    ProductoModificado: "producto-modificado",
+    ProductoEliminado: "producto-eliminado",
+    ProductoSeleccionado: "producto-seleccionado",
+    ProductoAgregadoModificado: "producto-add-edit"  
+};
+
 const reducer =(state,action) => {
+
+    switch(action.type){
+        case ActionTypes.ProductoAgregado:
+                return productoAgregadoReducer(state,action);
+
+        case ActionTypes.ProductoModificado:
+                return productoModificadoReducer(state,action);
+            
+        case ActionTypes.ProductoEliminado:
+                return productoEliminadoReducer(state, action);
+            
+        case ActionTypes.ProductoSeleccionado:
+                return productoSeleccionadoReducer(state, action);
+            
+        default:
+            return state;
+    }
+/*
     //Agregar
-    if(action.type == "producto-agregado"){
-        indice++;
+    if(action.type == ActionTypes.ProductoAgregado){
         const producto=action.payload;
-        const codigo=indice;
         const total=producto.cantidad*producto.precio;
         return {
             ...state,
@@ -16,16 +38,14 @@ const reducer =(state,action) => {
                 ...state.productos,
                 {
                     ...producto,
-                    codigo,
                     //total:total //esta linea es el equivalente a la linea de abajo, ya que la variable se llama igual a la propiedad
                     total
                 }
             ]
         };
     }
-
     //Editar
-    if(action.type=="producto-modificado"){
+    if(action.type==ActionTypes.ProductoModificado){
         
         const producto=action.payload;
         //la funcion slice() se puede utilizar para obtener el arreglo o parte del arreglo
@@ -47,9 +67,8 @@ const reducer =(state,action) => {
             productos
         }
     }
-
     //Eliminar
-    if(action.type=="producto-eliminado"){
+    if(action.type==ActionTypes.ProductoEliminado){
         
         const producto=action.payload;
         const codigo = producto.codigo;
@@ -59,9 +78,8 @@ const reducer =(state,action) => {
             productos    
         }
     }
-
     //Seleccionar (cuando se da click en el icono de Editar)
-    if(action.type=="producto-seleccionado"){
+    if(action.type==ActionTypes.ProductoSeleccionado){
 
         const codigo=action.payload.codigo;
         return{
@@ -69,9 +87,9 @@ const reducer =(state,action) => {
             producto:state.productos.find(x=>x.codigo==codigo) || {}
         }
     }
+    return state;*/
 
-    return state;
-};
+};//end reducer
 
 //Que es una Action Builder? No es mas que una funcion que va a tener el nombre del action que vamos a disparar
 //Agregando un Action Builder
@@ -82,22 +100,27 @@ const reducer =(state,action) => {
 };*/
 //Este metodo es equivalente a las 5 lineas de arriba 
 const productoSeleccionado=(codigo)=>({
-    type: "producto-seleccionado",
+    type: ActionTypes.ProductoSeleccionado,
     payload:{ codigo }
 });
 //Eliminar producto
 const productoEliminado=(codigo)=>({
-    type:"producto-eliminado",
+    type: ActionTypes.ProductoEliminado,
     payload: { codigo }
 });
 
 const productoModificado=(payload)=>({
-    type:"producto-modificado",
+    type: ActionTypes.ProductoModificado,
     payload
 });
 
 const productoAgregado = (payload) => ({
-    type:"producto-agregado",
+    type:ActionTypes.ProductoAgregado,
+    payload
+});
+
+const addEditProducto =(payload) => ({
+    type: ActionTypes.ProductoAgregadoModificado,
     payload
 });
 
@@ -127,4 +150,103 @@ const loggerMiddleware = store => next => action => {
     const result=next(action);
     console.log("next sate",store.getState());
     return result;
+}
+
+const addEditProductoMiddleware = store => next => action => {
+    if(action.type!=ActionTypes.ProductoAgregadoModificado){
+        return next(action);
+    }
+    const producto=action.payload;
+    /*let actionToDispatch;
+     //Condition to validate if this is Edit action or if we are adding an item 
+     if(producto.codigo){
+        
+        actionToDispatch=productoModificado(producto);
+    }else{
+        actionToDispatch=productoAgregado(producto);
+    }
+    */ //esta linea es un if ternario que es lo mismo que en las 8 lineas de arriba
+    const actionToDispatch=producto.codigo ? productoModificado(producto) : productoAgregado(producto);
+     //Condition to validate if this is Edit action or if we are adding an item 
+    store.dispatch(actionToDispatch);
+    //clear the form and the state
+    return store.dispatch(productoSeleccionado(null));
+}
+
+function productoSeleccionadoReducer( state, action) {
+    const codigo=action.payload.codigo;
+    return{
+        ...state,
+        producto:state.productos.find(x=>x.codigo==codigo) || {}
+    }
+}
+
+function productoEliminadoReducer( state, action) {
+    const producto = action.payload;
+    const codigo = producto.codigo;
+    const productos = state.productos.filter((item) => item.codigo != codigo);
+    return {
+        ...state,
+        productos
+    };
+}
+
+function productoModificadoReducer(state, action) {
+    const producto = action.payload;
+    //la funcion slice() se puede utilizar para obtener el arreglo o parte del arreglo
+    //en caso slice(1) esto obtiene el arreglo desde la segunda posicion
+    //en caso slice(1,3) esto obtiene el arreglo desde la segunda posicion hasta la cuarta posicion
+    const productos = state.productos.slice(); //si no se le pone ningun parametro esto realiza una copia del arreglo
+    const codigo = producto.codigo;
+    const old = productos.find((item) => item.codigo == codigo);
+    const index = productos.indexOf(old);
+    const total = producto.cantidad * producto.precio;
+
+    productos[index] = {
+        ...producto,
+        total
+    };
+
+    return {
+        ...state,
+        productos
+    };
+}
+
+function productoAgregadoReducer(state, action) {
+    const producto = action.payload;
+    const total = producto.cantidad * producto.precio;
+    return {
+        ...state,
+        productos: [
+            ...state.productos,
+            {
+                ...producto,
+                //total:total //esta linea es el equivalente a la linea de abajo, ya que la variable se llama igual a la propiedad
+                total
+            }
+        ]
+    };
+}
+
+//middleWare para eliminar la variable global indice
+function generadorCodigoProductoBuilder(codigoInicial){
+    
+    let codigo=codigoInicial;
+    return store => next => action => {
+        if(action.type!=ActionTypes.ProductoAgregado){
+            return next(action);
+        }
+        
+        codigo++;
+        const actionToDispath ={
+            ...action,
+            payload:{
+                ...action.payload,
+                codigo
+            }
+        };
+        //action.payload={...action.payload, codigo};//esta no es una buena practica porque estaba modificando el parametro action en vez de crear una copia del mismo 
+        return next(actionToDispath);
+    };
 }

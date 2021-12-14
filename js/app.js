@@ -4,11 +4,14 @@ const preloadedState={
     productos:[]
 };
 
-const middlewares = Redux.applyMiddleware(loggerMiddleware);
+const middlewares = Redux.applyMiddleware(
+    loggerMiddleware,
+    addEditProductoMiddleware,
+    generadorCodigoProductoBuilder(0)
+);
 const store=Redux.createStore(reducer, preloadedState, middlewares);
 
-let latestState;
-
+/*
 store.subscribe(() => {
 
     let currentState=store.getState();
@@ -18,18 +21,20 @@ store.subscribe(() => {
         ui.renderTable(currentState.productos);
     }
     
-});
+});*/
 
-ui.onFormSubmit = (producto) =>{
-    //Condition to validate if this is Edit action or if we are adding an item 
-    if(producto.codigo){
-        store.dispatch(productoModificado(producto));
-    }else{
-        store.dispatch(productoAgregado(producto));
+store.subscribe(dispatchOnChange(store, (state) => {
+    ui.renderForm(state.producto);
+    ui.renderTable(state.productos);
     }
-    //clear the form and the state
-    store.dispatch(productoSeleccionado(null));
-}
+));
+
+/*ui.onFormSubmit = (producto) =>{
+    store.dispatch(addEditProducto(producto));
+}*/
+ui.onFormSubmit = (producto) => store.dispatch(addEditProducto(producto));
+//en arrow functions los parentesis  no son requeridos si solo hay un parametro, Ejemplo:
+//ui.onFormSubmit = producto => store.dispatch(addEditProducto(producto));
 
 /* ui.onEliminarClick=(codigo)=>{
     store.dispatch(productoEliminado(codigo));
@@ -41,6 +46,16 @@ ui.onEliminarClick= (codigo) => store.dispatch(productoEliminado(codigo));
 //a esta linea se cambio de igual manera a como estaba de la siguiente manera
 ui.onEditarClick= (codigo) => store.dispatch(productoSeleccionado(codigo));
 
+function dispatchOnChange(store, dispatch){
+    let latestState;
+    return function(){
+        let currentState=store.getState();
+        if(currentState!=latestState){
+            latestState=currentState;
+            dispatch(currentState);
+        }
+    }
+}
 /*
 ui.sum=(elementos,selector)=>{
     return elementos
