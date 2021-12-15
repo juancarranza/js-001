@@ -9,7 +9,7 @@ const ActionTypes={
     ProductoAgregadoModificado: "producto-add-edit"  
 };
 
-const reducer =(state,action) => {
+export const reducer =(state,action) => {
 
     switch(action.type){
         case ActionTypes.ProductoAgregado:
@@ -99,27 +99,27 @@ const reducer =(state,action) => {
     }  
 };*/
 //Este metodo es equivalente a las 5 lineas de arriba 
-const productoSeleccionado=(codigo)=>({
+export const productoSeleccionado=(codigo)=>({
     type: ActionTypes.ProductoSeleccionado,
     payload:{ codigo }
 });
 //Eliminar producto
-const productoEliminado=(codigo)=>({
+export const productoEliminado=(codigo)=>({
     type: ActionTypes.ProductoEliminado,
     payload: { codigo }
 });
 
-const productoModificado=(payload)=>({
+export const productoModificado=(payload)=>({
     type: ActionTypes.ProductoModificado,
     payload
 });
 
-const productoAgregado = (payload) => ({
+export const productoAgregado = (payload) => ({
     type:ActionTypes.ProductoAgregado,
     payload
 });
 
-const addEditProducto =(payload) => ({
+export const addEditProducto =(payload) => ({
     type: ActionTypes.ProductoAgregadoModificado,
     payload
 });
@@ -145,14 +145,14 @@ Un Middleware nos es mas que una funcion
     }
 } */
 //esto es equivalente al Middleware de arriba solo que se utilizo arrow function
-const loggerMiddleware = store => next => action => {
+export const loggerMiddleware = store => next => action => {
     console.log("dispatching",action);
     const result=next(action);
     console.log("next sate",store.getState());
     return result;
 }
 
-const addEditProductoMiddleware = store => next => action => {
+export const addEditProductoMiddleware = store => next => action => {
     if(action.type!=ActionTypes.ProductoAgregadoModificado){
         return next(action);
     }
@@ -230,7 +230,7 @@ function productoAgregadoReducer(state, action) {
 }
 
 //middleWare para eliminar la variable global indice
-function generadorCodigoProductoBuilder(codigoInicial){
+export function generadorCodigoProductoBuilder(codigoInicial){
     
     let codigo=codigoInicial;
     return store => next => action => {

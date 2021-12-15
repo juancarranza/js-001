@@ -1,15 +1,18 @@
+import { applyMiddleware, createStore } from "redux";
+import { ui } from "./ui";
+import * as $store from "./store";
 /* ----------------Eventos-------------- */
 const preloadedState={
     producto:{},
     productos:[]
 };
 
-const middlewares = Redux.applyMiddleware(
-    loggerMiddleware,
-    addEditProductoMiddleware,
-    generadorCodigoProductoBuilder(0)
+const middlewares = applyMiddleware(
+    $store.loggerMiddleware,
+    $store.addEditProductoMiddleware,
+    $store.generadorCodigoProductoBuilder(0)
 );
-const store=Redux.createStore(reducer, preloadedState, middlewares);
+const store = createStore($store.reducer, preloadedState, middlewares);
 
 /*
 store.subscribe(() => {
@@ -32,7 +35,7 @@ store.subscribe(dispatchOnChange(store, (state) => {
 /*ui.onFormSubmit = (producto) =>{
     store.dispatch(addEditProducto(producto));
 }*/
-ui.onFormSubmit = (producto) => store.dispatch(addEditProducto(producto));
+ui.onFormSubmit = producto => store.dispatch($store.addEditProducto(producto));
 //en arrow functions los parentesis  no son requeridos si solo hay un parametro, Ejemplo:
 //ui.onFormSubmit = producto => store.dispatch(addEditProducto(producto));
 
@@ -41,10 +44,10 @@ ui.onFormSubmit = (producto) => store.dispatch(addEditProducto(producto));
 }
  */
 //esta linea es equivalente a las 3 lineas de arriba
-ui.onEliminarClick= (codigo) => store.dispatch(productoEliminado(codigo));
+ui.onEliminarClick= codigo => store.dispatch($store.productoEliminado(codigo));
 
 //a esta linea se cambio de igual manera a como estaba de la siguiente manera
-ui.onEditarClick= (codigo) => store.dispatch(productoSeleccionado(codigo));
+ui.onEditarClick= codigo => store.dispatch($store.productoSeleccionado(codigo));
 
 function dispatchOnChange(store, dispatch){
     let latestState;

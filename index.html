@@ -75,10 +75,7 @@
     <!-- adding redux js (Redux installed) -->
     <script src="./node_modules/redux/dist/redux.min.js"></script>
         <!-- <script  src="index-v2.js"></script> -->
-    
-    <script  src="js/store.js"></script>
-    <script  src="js/ui.js"></script>
-    <script  src="js/app.js"></script>
+    <script  src="./dist/main.js"></script>
 </body>
 </html>
 
@@ -94,5 +91,16 @@
         npm install --save bootstrap-icons@1.7.0
         adding .gitignore file, recommended url -> https://www.toptal.com/developers/gitignore
 
-
+        working with webpack -> url site=> https://webpack.js.org/
+        esta aplicacion nos permite empaquetar nuestra aplicacion y optimizarla.
+        npm install --save-dev webpack webpack-cli // esto se le pone dev porque en el archivo package.json no se agregan como dependencies si no serian unas dependencias solo para el entorno de desarrollo
+        
+        npm run test  // corremos los scripts que estan dentro del package.json
+        npm run build // trata de ejecutar el script donde especificamos que ejecute webpack, pero una de las convenciones de webpack es que tengamos una carpeta de src.
+                     //creamos carpeta src, dentro de ella agregamos el archivo index.js.
+        //en el index.js -> agregamos la sentencia -> import "./js/app";
+        // ejecutamos de nuevo 
+        modificamos src/app.js , src/store.js, src/ui.js con el fin de hacer uso de estos archivos como modulos y asi solo tener un invoke ./dist/main.js
+        npm run build
+        
     -->
