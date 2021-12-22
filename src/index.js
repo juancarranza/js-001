@@ -1,43 +1,67 @@
-//aqui se utilizan los modulos en javascript, como reutilizamos el codigo de javascript que tenemos en varios archivos. 
-//import "./js/app";
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
 
+const rootElement = document.getElementById("root");
+const titulo = "Hola React";
+const productosIniciales = [
+  { codigo: 1, nombre: "producto 1", cantidad: 2 },
+  { codigo: 2, nombre: "producto 2", cantidad: 5 }
+];
 
-/**
- *****Pasos para instalar e implementar React
- npm install react react-dom
- npm install -D @babel/core @babel/preset-env @babel/preset-react babel-loader
+function onProductoClick(event, prop) {
+  console.log(event.target);
+  console.log(prop);
+}
 
- *****Configurar webpack
- creamos un archivo webpack.config.js
-
- ****Linkear webpack con babel
- creamos un archivo babel.config.json
-
-
-*/
-
-import React from "react";
-import ReactDom from "react-dom";
-import "./index.css";//para que esto funcione seguir los siguientes pasos 
-/**
- * npm install -D style-loader css-loader 
- * se agrega esto al webpack.config.json
- * {
-        use: ["styles-loader", "css-loader"],
-        test: /.css$/
-   }
- * 
- * 
- */
-import logo from "./logo.PNG";
-
-
-const container =document.getElementById("root");
-const App = () => (
-    <div className="app">
-        <h1>Hola mundo desde React!</h1>
-        <img src = {logo} />
-    </div>
+const Producto = (prop) => (
+  <li className="producto" onClick={(e) => prop.onProductoClick(prop, e)}>
+    Nombre: {prop.nombre}, Cantidad: {prop.cantidad}
+  </li>
 );
 
-ReactDom.render(<App />, container);
+const Productos = (prop) => (
+  <ul>
+    {prop.productos.map((item) => (
+      <Producto
+        key={item.codigo}
+        codigo={item.codigo}
+        cantidad={item.cantidad}
+        nombre={item.nombre}
+        onProductoClick={prop.onProductoClick}
+      />
+    ))}
+  </ul>
+);
+
+function cuadrado(valor) {
+  return valor * valor;
+}
+//La convencion en React es que los componentes/funciones se llamen con
+//la primera mayuscula
+const Encabezado = (prop) => (
+  <h1>
+    {prop.titulo} : {prop.valor}
+  </h1>
+);
+
+const App = () => {
+  const [productos, setProductos] = useState(productosIniciales);
+
+  const update = (prop) => {
+    const newProductos = productos.slice();
+    const producto = newProductos.find((x) => x.codigo == prop.codigo);
+    const index = productos.indexOf(producto);
+    newProductos[index] = { ...producto, cantidad: producto.cantidad + 1 };
+    console.log("newProductos", newProductos);
+    setProductos(newProductos);
+  };
+
+  return (
+    <div>
+      <Encabezado titulo={titulo} valor={cuadrado(2 * 4)} />
+      <Productos productos={productos} onProductoClick={update} />
+    </div>
+  );
+};
+
+ReactDOM.render(<App />, rootElement);
