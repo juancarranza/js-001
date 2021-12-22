@@ -40,7 +40,7 @@ function cuadrado(valor) {
 //la primera mayuscula
 const Encabezado = (prop) => (
   <h1>
-    {prop.titulo} : {prop.valor}
+    {prop.titulo} - {prop.valor}
   </h1>
 );
 
@@ -65,3 +65,4 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, rootElement);
+//https://github.com/pmmmwh/react-refresh-webpack-plugin
