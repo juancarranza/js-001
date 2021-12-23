@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { Encabezado, Productos } from "./productos.component";
 
 const rootElement = document.getElementById("root");
 const titulo = "Hola React";
@@ -13,36 +14,9 @@ function onProductoClick(event, prop) {
   console.log(prop);
 }
 
-const Producto = (prop) => (
-  <li className="producto" onClick={(e) => prop.onProductoClick(prop, e)}>
-    Nombre: {prop.nombre}, Cantidad: {prop.cantidad}
-  </li>
-);
-
-const Productos = (prop) => (
-  <ul>
-    {prop.productos.map((item) => (
-      <Producto
-        key={item.codigo}
-        codigo={item.codigo}
-        cantidad={item.cantidad}
-        nombre={item.nombre}
-        onProductoClick={prop.onProductoClick}
-      />
-    ))}
-  </ul>
-);
-
 function cuadrado(valor) {
   return valor * valor;
 }
-//La convencion en React es que los componentes/funciones se llamen con
-//la primera mayuscula
-const Encabezado = (prop) => (
-  <h1>
-    {prop.titulo} - {prop.valor}
-  </h1>
-);
 
 const App = () => {
   const [productos, setProductos] = useState(productosIniciales);
