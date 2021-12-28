@@ -1,21 +1,23 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { productoEliminado, productoSeleccionado } from "../store/store";
 
 const ProductItem = (prop) => {
-    const item = prop.item;
+    const producto = prop.producto;
     const acciones = prop.acciones;
     return <tr>
-        <td>{item.codigo}</td>
-        <td>{item.nombre}</td>
-        <td>{item.cantidad}</td>
-        <td>{item.precio}</td>
-        <td>{item.total}</td>
+        <td>{producto.codigo}</td>
+        <td>{producto.nombre}</td>
+        <td>{producto.cantidad}</td>
+        <td>{producto.precio}</td>
+        <td>{producto.total}</td>
         <td>
             <div className="btn-group">
                 <a 
                     title="Editar" 
                     href="#" 
                     className="btn btn-sm btn-outline-secondary" 
-                    onClick={() => acciones.seleccionar(item.codigo)}
+                    onClick={() => acciones.seleccionar(producto.codigo)}
                     >
                     <i className="bi bi-pencil-square"></i>
                 </a> 
@@ -24,7 +26,7 @@ const ProductItem = (prop) => {
                     title="Eliminar" 
                     href="#" 
                     className="btn btn-sm btn-outline-danger"
-                    onClick={() => acciones.eliminar(item.codigo)}
+                    onClick={() => acciones.eliminar(producto.codigo)}
                     >
                     <i className="bi bi-trash"></i>
                 </a> 
@@ -34,25 +36,12 @@ const ProductItem = (prop) => {
 }
 
 const ProductList = () => {
-    const productos = [
-        {
-            codigo: 1,
-            nombre: "producto 1",
-            cantidad: 10,
-            precio: 11,
-            total: 110
-        
-        }
-    ];
+    const productos =useSelector((state)=> state.productos);
+    const dispatch = useDispatch();
 
-    const seleccionar = (codigo) => {
-        console.log('seleccionar: ', codigo);
-    };
-
-    const eliminar = (codigo) => {
-        console.log('eliminar: ', codigo);
-    };
-
+    const seleccionar = (codigo) => dispatch(productoSeleccionado(codigo));
+    const eliminar = (codigo) => dispatch(productoEliminado(codigo));
+    
     const acciones = {
         seleccionar,
         eliminar
@@ -73,7 +62,7 @@ const ProductList = () => {
             </tr>
         </thead>
         <tbody>
-            {productos.map(item => <ProductItem key={item.codigo} item = {item} acciones={acciones} />)} 
+            {productos.map(item => <ProductItem key={item.codigo} producto = {item} acciones={acciones} />)} 
         </tbody>
         <tfoot>
             <tr>

@@ -27,67 +27,7 @@ export const reducer =(state,action) => {
         default:
             return state;
     }
-/*
-    //Agregar
-    if(action.type == ActionTypes.ProductoAgregado){
-        const producto=action.payload;
-        const total=producto.cantidad*producto.precio;
-        return {
-            ...state,
-            productos:[
-                ...state.productos,
-                {
-                    ...producto,
-                    //total:total //esta linea es el equivalente a la linea de abajo, ya que la variable se llama igual a la propiedad
-                    total
-                }
-            ]
-        };
-    }
-    //Editar
-    if(action.type==ActionTypes.ProductoModificado){
-        
-        const producto=action.payload;
-        //la funcion slice() se puede utilizar para obtener el arreglo o parte del arreglo
-        //en caso slice(1) esto obtiene el arreglo desde la segunda posicion
-        //en caso slice(1,3) esto obtiene el arreglo desde la segunda posicion hasta la cuarta posicion
-        const productos=state.productos.slice();//si no se le pone ningun parametro esto realiza una copia del arreglo
-        const codigo = producto.codigo;
-        const old=productos.find((item)=>item.codigo == codigo);
-        const index=productos.indexOf(old);
-        const total=producto.cantidad*producto.precio;
 
-        productos[index]={
-            ...producto,
-            total
-        };
-
-        return{
-            ...state,
-            productos
-        }
-    }
-    //Eliminar
-    if(action.type==ActionTypes.ProductoEliminado){
-        
-        const producto=action.payload;
-        const codigo = producto.codigo;
-        const productos=state.productos.filter((item) => item.codigo!= codigo);
-        return{
-            ...state,
-            productos    
-        }
-    }
-    //Seleccionar (cuando se da click en el icono de Editar)
-    if(action.type==ActionTypes.ProductoSeleccionado){
-
-        const codigo=action.payload.codigo;
-        return{
-            ...state,
-            producto:state.productos.find(x=>x.codigo==codigo) || {}
-        }
-    }
-    return state;*/
 
 };//end reducer
 
