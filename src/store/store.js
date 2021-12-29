@@ -92,6 +92,26 @@ export const loggerMiddleware = store => next => action => {
     return result;
 }
 
+export const storageMiddleware = store => next => action => {
+    
+    const actions=[
+        ActionTypes.ProductoAgregado, 
+        ActionTypes.ProductoEliminado, 
+        ActionTypes.ProductoModificado
+    ];
+    const result = next(action);
+
+    if(actions.indexOf(action.type) >= 0){
+        const state = store.getState();
+        //session storage (RAM)
+        //sessionStorage.setItem("state", JSON.stringify(state));
+        //local storage (Disco Duro)
+        localStorage.setItem("state", JSON.stringify(state));
+    }
+    
+    return result;
+};
+
 export const addEditProductoMiddleware = store => next => action => {
     if(action.type!=ActionTypes.ProductoAgregadoModificado){
         return next(action);
