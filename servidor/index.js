@@ -20,6 +20,8 @@ app.use(logs);
 app.get("/", (req, res) => res.send("<h1> API de productos </h1>"));
 
 app.get("/productos", isAuthenticated, (req, res) => res.json(productos));
+app.post();
+
 
 app.listen(5000, ()=>{
     console.log("Servidor express escuchando puerto 5000");
