@@ -1,0 +1,15 @@
+### Home
+GET http://localhost:5000/
+
+### Obtener Productos
+GET http://localhost:5000/Productos
+
+### Crear Producto
+POST http://localhost:5000/Productos
+Content-Type: application/json
+
+{
+    "nombre": "producto b",
+    "cantidad": 5,
+    "precio": 20
+}

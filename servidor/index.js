@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from "body-parser";
 
 const app = express();
 const productos = [
@@ -16,18 +17,24 @@ const productos = [
     }, 
 ];
 
+app.use(bodyParser.json({type: 'application/json'}));
 app.use(logs);
+
 app.get("/", (req, res) => res.send("<h1> API de productos </h1>"));
 
-app.get("/productos", isAuthenticated, (req, res) => res.json(productos));
-app.post();
+app.get("/productos", (req, res) => res.json(productos));
+app.post("/productos",(req, res) => {
+    console.log("body: ", req.body);
+    
+    res.json({codigo: 3, nombre: "producto 3", precio: 30, cantidad:100});
+});
 
 
 app.listen(5000, ()=>{
     console.log("Servidor express escuchando puerto 5000");
 });
 
-function isAuthenticated(req, res, next){
+/* function isAuthenticated(req, res, next){
     
     const auth = req.headers.authorization;
     if(auth == "hola-mundo"){
@@ -36,7 +43,7 @@ function isAuthenticated(req, res, next){
         res.status(401);
         res.send("Not authorized");
     }
-}
+} */
 
 function logs(req, res, next){
     console.log(`${req.method}: ${req.originalUrl}`);
