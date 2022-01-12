@@ -9,7 +9,7 @@ POST http://localhost:5000/Productos
 Content-Type: application/json
 
 {
-    "nombre": "producto b",
+    "nombre": "producto c",
     "cantidad": 5,
-    "precio": 20
+    "precio": 30
 }
