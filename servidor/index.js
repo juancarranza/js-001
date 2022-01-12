@@ -4,9 +4,20 @@ import http from "http";
 const server = http.createServer((req, res) => {
 
     res.writeHead(200, {
-        "Content-Type": "text/html"
+        "Content-Type": "application/json"
     });
-    res.write("<h1> Hola mundo desde Node usando http</h1>");
+    res.write(JSON.stringify([
+        {
+            codigo: 1,
+            nombre: "producto1",
+            cantidad: 100
+        },
+        {
+            codigo: 2,
+            nombre: "producto2",
+            cantidad: 50
+        }
+    ]));
     res.end();
 });
 
