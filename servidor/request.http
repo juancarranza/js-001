@@ -2,10 +2,10 @@
 GET http://localhost:5000/
 
 ### Obtener Productos
-GET http://localhost:5000/Productos
+GET http://localhost:5000/productos
 
 ### Crear Producto
-POST http://localhost:5000/Productos
+POST http://localhost:5000/productos
 Content-Type: application/json
 
 {
@@ -13,3 +13,21 @@ Content-Type: application/json
     "cantidad": 5,
     "precio": 30
 }
+
+### Modificar Producto
+PUT http://localhost:5000/productos/3
+Content-Type: application/json
+
+{
+    "nombre": "producto c4",
+    "cantidad": 53,
+    "precio": 40
+}
+
+
+
+### Eliminar Producto
+DELETE http://localhost:5000/productos/3
+
+### Obtener Producto
+GET http://localhost:5000/productos/4
