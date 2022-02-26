@@ -15,11 +15,11 @@ Content-Type: application/json
 }
 
 ### Modificar Producto
-PUT http://localhost:5000/productos/3
+PUT http://localhost:5000/productos/2
 Content-Type: application/json
 
 {
-    "nombre": "producto c4",
+    "nombre": "libro",
     "cantidad": 53,
     "precio": 40
 }
@@ -29,5 +29,9 @@ Content-Type: application/json
 ### Eliminar Producto
 DELETE http://localhost:5000/productos/3
 
+
 ### Obtener Producto
 GET http://localhost:5000/productos/4
+
+### Obtener Productos
+GET http://localhost:5000/productos?filtro=libro
